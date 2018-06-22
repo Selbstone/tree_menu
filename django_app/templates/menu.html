@@ -1,0 +1,14 @@
+<ul >
+    {% for menu_item in menu_items %}
+        <li class='menu-items' >
+            <a href="{{ menu_item.get_url }}">{{ menu_item }}</a>
+            {% if menu_item.get_url in context.request.path  %}
+                {% if menu_item.get_children %}
+                    {% with menu_items=menu_item.get_children %}
+                        {% include "menu.html" %}
+                    {% endwith %}
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
