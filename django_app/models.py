@@ -6,6 +6,8 @@ from django.urls import reverse
 class MenuItem(models.Model):
     name_item = models.CharField(max_length=50)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    name_menu = models.CharField(max_length=50)
+    path = models.CharField(max_length=100, blank=True)
     url = models.CharField(max_length=100, blank=True)
     named_url = models.CharField(max_length=100, blank=True)
 
@@ -14,6 +16,15 @@ class MenuItem(models.Model):
 
     def get_children(self):
         return self.menuitem_set.all()
+
+    def save(self, *args, **kwargs):
+        if self.named_url:
+            url_split = self.named_url.split()
+            self.url = reverse(url_split[0], args=url_split[1:len(url_split)])
+        elif not self.url:
+            self.url = '/'
+        super(MenuItem, self).save(*args, **kwargs)
+
 
     def get_url(self):
         if self.named_url:

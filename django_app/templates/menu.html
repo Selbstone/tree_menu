@@ -1,10 +1,10 @@
 <ul >
-    {% for menu_item in menu_items %}
-        <li class='menu-items' >
-            <a href="{{ menu_item.get_url }}">{{ menu_item }}</a>
-            {% if menu_item.get_url in context.request.path  %}
-                {% if menu_item.get_children %}
-                    {% with menu_items=menu_item.get_children %}
+    {% for menu_item, child_items in menu_items.items %}
+        <li>
+            <a href="{{ menu_item.url }}">{{ menu_item.name_item }}</a>
+            {% if menu_item.url in context.request.path %}
+                {% if child_items.items %}
+                    {% with menu_items=child_items %}
                         {% include "menu.html" %}
                     {% endwith %}
                 {% endif %}
